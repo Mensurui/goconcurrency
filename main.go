@@ -1,17 +1,21 @@
 package main
 
 import (
-	"fmt"
-	"time"
+	"github.com/Mensurui/goconcurrency/errors"
+	"github.com/hashicorp/go-hclog"
 )
 
 func main() {
-	var data int
-	go func() {
-		data++
-	}()
-	if data == 0 {
-		time.Sleep(3 * time.Second)
-		fmt.Printf("The value of data is: %v\n", data)
+	hl := hclog.Default()
+	raceCondition := errors.NewRaceCondition(hl)
+
+	err := raceCondition.ConditionOne()
+	if err != nil {
+		hl.Log(hclog.NoLevel, "[ERROR]: %v", err)
+	}
+
+	err = raceCondition.ConditionTwo()
+	if err != nil {
+		hl.Log(hclog.NoLevel, "[ERROR]: %v", err)
 	}
 }
