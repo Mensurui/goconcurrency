@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"sync"
 
 	"github.com/Mensurui/goconcurrency/errors"
@@ -12,7 +13,7 @@ func main() {
 	memoryAccess := sync.Mutex{}
 	raceCondition := errors.NewRaceCondition(hl)
 	raceConditionSolution := errors.NewSync(hl, &memoryAccess)
-
+	deadlock := errors.NewDeadlock(hl, &memoryAccess)
 	err := raceCondition.ConditionOne()
 	if err != nil {
 		hl.Log(hclog.NoLevel, "[ERROR]: %v", err)
@@ -28,4 +29,9 @@ func main() {
 		hl.Log(hclog.NoLevel, "[ERROR]: %v", err)
 	}
 
+	err = deadlock.DeadlockVisual()
+	if err != nil {
+		log.Printf("[ERROR]: %v", err)
+		hl.Log(hclog.NoLevel, "[ERROR]: %v", err)
+	}
 }
