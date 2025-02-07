@@ -40,6 +40,7 @@ func (dl Deadlock) DeadlockVisual() error {
 
 	var a, b value
 	wg.Add(2)
+	dl.syncM.Lock()
 	go printSum(&a, &b)
 	go printSum(&b, &a)
 	wg.Wait()
