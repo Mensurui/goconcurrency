@@ -38,4 +38,7 @@ func main() {
 
 	livelock.WalkingExample()
 
+	starvation := errors.NewStarvation()
+	starvation.FirstStarvation()
+
 }
